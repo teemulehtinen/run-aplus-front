@@ -17,6 +17,7 @@ RUN pip3 install -r requirements.txt \
   && python3 manage.py migrate \
   && python3 manage.py test-bench-setup
 
+VOLUME /srv/media
 VOLUME /db
 EXPOSE 8000
 
