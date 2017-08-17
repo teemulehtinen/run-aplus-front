@@ -50,5 +50,5 @@ class Command(BaseCommand):
             url="current",
             starting_time=today,
             ending_time=today + timedelta(days=365),
-            configure_url="http://grader/default/aplus-json",
+            configure_url="http://grader:8080/default/aplus-json",
         )
