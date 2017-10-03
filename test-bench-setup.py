@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from course.models import Course, CourseInstance
+from external_services.models import LTIService
 from userprofile.models import UserProfile
 
 class Command(BaseCommand):
@@ -12,6 +13,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.create_default_users()
         self.create_default_courses()
+        self.create_default_services()
 
     def create_default_users(self):
 
@@ -51,4 +53,13 @@ class Command(BaseCommand):
             starting_time=today,
             ending_time=today + timedelta(days=365),
             configure_url="http://grader:8080/default/aplus-json",
+        )
+
+    def create_default_services(self):
+        service = LTIService.objects.create(
+            url="http://localhost:8090/",
+            menu_label="Rubyric+",
+            menu_icon_class="save-file",
+            consumer_key="foo",
+            consumer_secret="bar",
         )
