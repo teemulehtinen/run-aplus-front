@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         instance = CourseInstance.objects.get(
-            course__url="default",
+            course__url="def",
             url="current",
         )
         errors = configure_content(instance, instance.configure_url)
