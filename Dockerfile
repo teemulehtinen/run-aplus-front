@@ -35,6 +35,9 @@ RUN git clone https://github.com/Aalto-LeTech/a-plus.git . \
   && rm requirements.txt \
   && rm -rf /root/.cache \
 \
+  && find /usr/local/lib/python* -path '*/locale/*/*' | grep -vE '/locale/(fi|en|sv)/' | xargs rm -rf \
+  && find /usr/local/lib/python* -name 'tests' -a -type d -print0 | xargs -0 rm -rf \
+\
   && python3 manage.py migrate \
   && python3 /srv/test-bench-setup.py \
   && chmod 0777 $APLUS_DB_FILE \
