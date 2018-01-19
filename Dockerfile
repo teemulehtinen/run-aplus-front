@@ -22,20 +22,18 @@ ENV APLUS_MEDIA_ROOT=/srv/data/aplus \
     APLUS_OVERRIDE_SUBMISSION_HOST="http://plus:8000"
 
 # Install the application and requirements
-#  clone
-#  suppress warnings about missing local_settings
-#  prebuild python files (readonly code as normal user)
-#  install requirements
-#  rm requirements.txt (not required anymore and indicates that this is prod. version)
+#  1) clone, touch local_settings to suppress warnings, prebuild .pyc files
+#  2) install requirements, remove the file, remove unrequired locales and tests
+#  3) create database and fill with test environment info
 RUN git clone https://github.com/Aalto-LeTech/a-plus.git . \
   && touch aplus/local_settings.py \
   && python3 -m compileall -q . \
+\
   && pip3 --no-cache-dir --disable-pip-version-check install -r requirements.txt \
   && rm requirements.txt \
+  && find /usr/local/lib/python* -type d -regex '.*/locale/[a-z_A-Z]+' -not -regex '.*/\(en\|fi\|sv\)' -print0 | xargs -0 rm -rf \
+  && find /usr/local/lib/python* -type d -name 'tests' -print0 | xargs -0 rm -rf \
   && rm -rf /root/.cache \
-\
-  && find /usr/local/lib/python* -path '*/locale/*/*' | grep -vE '/locale/(fi|en|sv)/' | xargs rm -rf \
-  && find /usr/local/lib/python* -name 'tests' -a -type d -print0 | xargs -0 rm -rf \
 \
   && python3 manage.py migrate \
   && python3 /srv/test-bench-setup.py \
