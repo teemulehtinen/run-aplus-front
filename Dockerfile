@@ -6,7 +6,7 @@ RUN mkdir -p /srv/a-plus /srv/data/aplus \
 COPY up.sh test-bench-setup.py /srv/
 
 # Install system packages
-RUN apt-get update -qqy && apt-get install -qqy --no-install-recommends \
+RUN apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends \
     -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
     python3-pillow \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
