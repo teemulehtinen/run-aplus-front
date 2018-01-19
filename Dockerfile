@@ -1,17 +1,15 @@
 FROM apluslms/run-python3
 
-# Required paths
+# Required paths and tools
 RUN mkdir -p /srv/a-plus /srv/data/aplus \
  && chmod 1777 /srv/data /srv/data/aplus
+COPY up.sh test-bench-setup.py /srv/
 
 # Install system packages
 RUN apt-get update -qqy && apt-get install -qqy --no-install-recommends \
     -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
     python3-pillow \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
-
-# Copy tools used to start this container
-COPY up.sh test-bench-setup.py /srv/
 
 # Set container related configuration via environment variables
 WORKDIR /srv/a-plus
