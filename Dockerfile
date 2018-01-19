@@ -1,27 +1,49 @@
 FROM apluslms/run-python3
 
+# Required paths
+RUN mkdir -p /srv/a-plus /srv/data/aplus \
+ && chmod 1777 /srv/data /srv/data/aplus
+WORKDIR /srv/a-plus
+
+# Install system packages
 RUN apt-get update -qqy && apt-get install -qqy --no-install-recommends \
+    -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
     python3-pillow \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
-WORKDIR /srv
+# Copy tools used to start this container
+COPY up.sh test-bench-setup.py /srv/
 
-RUN git clone https://github.com/Aalto-LeTech/a-plus.git .
+# Set container related configuration via environment variables
+ENV APLUS_DB_FILE /srv/data/aplus.sqlite3
+ENV APLUS_SECRET_KEY_FILE /srv/data/aplus_secret_key.py
+ENV APLUS_MEDIA_ROOT /srv/data/aplus
+ENV DJANGO_CACHES "{\"default\": {\"BACKEND\": \"django.core.cache.backends.dummy.DummyCache\"}}"
+ENV APLUS_DATABASES "{\"default\": {\"ENGINE\": \"django.db.backends.sqlite3\", \"NAME\": \"$APLUS_DB_FILE\"}}"
+ENV APLUS_OVERRIDE_SUBMISSION_HOST "http://plus:8000"
 
-ADD local_settings.py .
-ADD up.sh .
-ADD test-bench-setup.py ./course/management/commands/test-bench-setup.py
-ADD test-bench-configure.py ./course/management/commands/test-bench-configure.py
-
-RUN pip3 install -r requirements.txt \
+# Install the application and requirements
+#  clone
+#  suppress warnings about missing local_settings
+#  prebuild python files (readonly code as normal user)
+#  install requirements
+#  rm requirements.txt (not required anymore and indicates that this is prod. version)
+RUN git clone https://github.com/Aalto-LeTech/a-plus.git . \
+  && touch aplus/local_settings.py \
+  && python3 -m compileall -q . \
+  && pip3 --no-cache-dir --disable-pip-version-check install -r requirements.txt \
+  && rm requirements.txt \
   && rm -rf /root/.cache \
-  && mkdir -p media \
-  && mkdir -p /db \
+\
   && python3 manage.py migrate \
-  && python3 manage.py test-bench-setup
+  && python3 /srv/test-bench-setup.py \
+  && chmod 0777 $APLUS_DB_FILE \
+  && rm -rf $APLUS_SECRET_KEY_FILE
 
-VOLUME /srv/media
-VOLUME /db
+# Set home to world readable location (supports running container as normal user)
+ENV HOME /srv/data
+
+VOLUME /srv/data
 EXPOSE 8000
 
-ENTRYPOINT [ "./up.sh" ]
+ENTRYPOINT [ "/srv/up.sh" ]
