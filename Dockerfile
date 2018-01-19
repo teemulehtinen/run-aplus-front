@@ -16,7 +16,8 @@ WORKDIR /srv/a-plus
 ENV HOME=/srv/data \
     APLUS_DB_FILE=/srv/data/aplus.sqlite3 \
     APLUS_SECRET_KEY_FILE=/srv/data/aplus_secret_key.py
-ENV APLUS_MEDIA_ROOT=/srv/data/aplus \
+ENV DJANGO_DEBUG=true \
+    APLUS_MEDIA_ROOT=/srv/data/aplus \
     DJANGO_CACHES="{\"default\": {\"BACKEND\": \"django.core.cache.backends.dummy.DummyCache\"}}" \
     APLUS_DATABASES="{\"default\": {\"ENGINE\": \"django.db.backends.sqlite3\", \"NAME\": \"$APLUS_DB_FILE\"}}" \
     APLUS_OVERRIDE_SUBMISSION_HOST="http://plus:8000"
