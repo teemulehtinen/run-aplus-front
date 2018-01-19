@@ -18,6 +18,7 @@ You can mount development version on top of that, if you wish.
 
 Location `/srv/data` is a volume and contains submission files, database and secret key.
 It's word writable, so you can run this container as normal user.
+When running as your self, you could even bind local path to it.
 
 Partial example of `docker-compose.yml` (user and volumes are optional of course):
 
@@ -27,8 +28,12 @@ services:
     image: apluslms/run-aplus-front
     user: $USER_ID:$GROUP_ID
     volumes:
-      - data:/srv/data
-      - /home/me/a-plus/:/srv/a-plus/
+    # named persistent volume (untill removed)
+    # - data:/srv/data
+    # per project persistent storage
+    # - ./_data/:/srv/data
+    # mount development version
+    # - /home/user/a-plus/:/srv/a-plus/
     ports:
       - "8000:8000"
     depends_on:
