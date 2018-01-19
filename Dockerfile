@@ -3,7 +3,10 @@ FROM apluslms/run-python3
 # Required paths
 RUN mkdir -p /srv/a-plus /srv/data/aplus \
  && chmod 1777 /srv/data /srv/data/aplus
+
+# set WORKDIR to app location and HOME to world writable location
 WORKDIR /srv/a-plus
+ENV HOME /srv/data
 
 # Install system packages
 RUN apt-get update -qqy && apt-get install -qqy --no-install-recommends \
@@ -43,8 +46,6 @@ RUN git clone https://github.com/Aalto-LeTech/a-plus.git . \
   && chmod 0777 $APLUS_DB_FILE \
   && rm -rf $APLUS_SECRET_KEY_FILE
 
-# Set home to world readable location (supports running container as normal user)
-ENV HOME /srv/data
 
 VOLUME /srv/data
 EXPOSE 8000
