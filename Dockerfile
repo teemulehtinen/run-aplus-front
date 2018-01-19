@@ -26,6 +26,7 @@ ENV APLUS_MEDIA_ROOT=/srv/data/aplus \
 #  2) install requirements, remove the file, remove unrequired locales and tests
 #  3) create database and fill with test environment info
 RUN git clone https://github.com/Aalto-LeTech/a-plus.git . \
+  && rm -rf .git \
   && touch aplus/local_settings.py \
   && python3 -m compileall -q . \
 \
