@@ -22,6 +22,6 @@ else
         python3 /srv/test-bench-setup.py
     fi
 
-    python3 manage.py reload_course_configuration def/current
+    python3 manage.py reload_course_configuration def/current || true
     exec python3 manage.py runserver 0.0.0.0:8000
 fi
