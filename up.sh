@@ -10,6 +10,9 @@ if [ -e "requirements.txt" ]; then
     [ "$db" -a -e "$db" ] && python3 manage.py migrate
 fi
 
+# make sure some data paths exists
+mkdir -p "$APLUS_MEDIA_ROOT"
+
 if [ "$1" = "manage" ]; then
     shift
     exec python3 manage.py "$@"

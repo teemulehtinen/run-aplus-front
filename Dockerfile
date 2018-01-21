@@ -1,8 +1,8 @@
 FROM apluslms/run-python3
 
 # Required paths and tools
-RUN mkdir -p /srv/a-plus /srv/data/aplus \
- && chmod 1777 /srv/data /srv/data/aplus
+RUN mkdir -p /srv/a-plus /srv/data \
+ && chmod 1777 /srv/data
 COPY up.sh test-bench-setup.py /srv/
 
 # Install system packages
