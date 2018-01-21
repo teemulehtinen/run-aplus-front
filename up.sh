@@ -4,8 +4,8 @@ db=$APLUS_DB_FILE
 
 # Check for development mount -> install updated requirements to venv (no root perms)
 if [ -e "requirements.txt" ]; then
-    python3 -m virtualenv -p python3 --system-site-packages /srv/data/venv
-    . /srv/data/venv/bin/activate
+    python3 -m virtualenv -p python3 --system-site-packages /srv/data/aplus_venv
+    . /srv/data/aplus_venv/bin/activate
     pip3 install --disable-pip-version-check -r requirements.txt
     [ "$db" -a -e "$db" ] && python3 manage.py migrate
 fi
