@@ -27,6 +27,7 @@ ENV DJANGO_DEBUG=true \
 #  2) install requirements, remove the file, remove unrequired locales and tests
 #  3) create database and fill with test environment info
 RUN git clone https://github.com/Aalto-LeTech/a-plus.git . \
+  && (echo "On branch $(git rev-parse --abbrev-ref HEAD) | $(git describe)"; echo; git log -n5) > GIT \
   && rm -rf .git \
   && touch aplus/local_settings.py \
   && python3 -m compileall -q . \
