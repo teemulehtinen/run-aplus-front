@@ -35,7 +35,6 @@ RUN git clone https://github.com/Aalto-LeTech/a-plus.git . \
   && rm requirements.txt \
   && find /usr/local/lib/python* -type d -regex '.*/locale/[a-z_A-Z]+' -not -regex '.*/\(en\|fi\|sv\)' -print0 | xargs -0 rm -rf \
   && find /usr/local/lib/python* -type d -name 'tests' -print0 | xargs -0 rm -rf \
-  && rm -rf /root/.cache \
 \
   && python3 manage.py migrate \
   && python3 /srv/test-bench-setup.py \
