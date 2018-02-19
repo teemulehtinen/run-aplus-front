@@ -26,5 +26,5 @@ else
     fi
 
     python3 manage.py reload_course_configuration def/current || true
-    exec python3 manage.py runserver 0.0.0.0:8000
+    exec python3 manage.py runserver 0.0.0.0:8000 --nothreading
 fi
