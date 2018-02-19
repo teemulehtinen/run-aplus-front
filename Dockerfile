@@ -20,6 +20,7 @@ ENV DJANGO_DEBUG=true \
     APLUS_MEDIA_ROOT=/srv/data/aplus \
     DJANGO_CACHES="{\"default\": {\"BACKEND\": \"django.core.cache.backends.dummy.DummyCache\"}}" \
     APLUS_DATABASES="{\"default\": {\"ENGINE\": \"django.db.backends.sqlite3\", \"NAME\": \"$APLUS_DB_FILE\"}}" \
+    APLUS_REMOTE_PAGE_HOSTS_MAP="{\"grader:8080\": \"localhost:8080\"}" \
     APLUS_OVERRIDE_SUBMISSION_HOST="http://plus:8000"
 
 # Install the application and requirements
