@@ -21,6 +21,11 @@ CACHES = {
     },
 }
 
+REMOTE_PAGE_HOSTS_MAP = {
+    "grader:8080": "localhost:8080",
+}
+OVERRIDE_SUBMISSION_HOST = "http://plus:8000"
+
 #CELERY_BROKER_URL = "amqp://"
 
 LOGGING['loggers'].update({
