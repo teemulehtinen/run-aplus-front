@@ -7,6 +7,7 @@ ENV CONTAINER_TYPE="aplus" \
 
 COPY rootfs /
 
+ARG BRANCH=master
 RUN apt_install python3-pillow \
 \
   # Create user
@@ -14,7 +15,7 @@ RUN apt_install python3-pillow \
   && mkdir /srv/aplus && chown aplus.nogroup /srv/aplus && cd /srv/aplus \
 \
   # clone, touch local_settings to suppress warnings, prebuild .pyc files
-  && git clone --quiet --single-branch https://github.com/Aalto-LeTech/a-plus.git . \
+  && git clone --quiet --single-branch --branch $BRANCH https://github.com/Aalto-LeTech/a-plus.git . \
   && (echo "On branch $(git rev-parse --abbrev-ref HEAD) | $(git describe)"; echo; git log -n5) > GIT \
   && rm -rf .git \
   && python3 -m compileall -q . \
