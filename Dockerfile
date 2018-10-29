@@ -27,7 +27,7 @@ RUN apt_install python3-pillow \
   && find /usr/local/lib/python* -type d -name 'tests' -print0 | xargs -0 rm -rf \
 \
   # 3) preprocess
-  && python3 manage.py compilemessages 2>&1 \
+  && env APLUS_SECRET_KEY="dummy" python3 manage.py compilemessages 2>&1 \
   && env APLUS_SECRET_KEY="dummy" create-django-db.sh aplus aplus /srv/aplus-setup.py
 
 
