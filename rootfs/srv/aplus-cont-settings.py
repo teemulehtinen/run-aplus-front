@@ -6,6 +6,7 @@ ADMINS = (
 
 STATIC_ROOT = '/local/aplus/static/'
 MEDIA_ROOT = '/local/aplus/media/'
+BASE_URL = 'http://localhost:8000'
 
 DATABASES = {
     'default': {
