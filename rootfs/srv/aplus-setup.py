@@ -44,7 +44,7 @@ def create_default_users():
     return {'root': ur.userprofile, 'teacher': ur.userprofile, 'assistant': ua.userprofile, 'student': us.userprofile}
 
 def create_default_courses(users):
-    from course.models import Course, CourseInstance
+    from course.models import Course, CourseInstance, Enrollment
 
     course = Course.objects.create(
         name="Def. Course",
@@ -63,6 +63,9 @@ def create_default_courses(users):
         configure_url="http://grader:8080/default/aplus-json",
     )
     instance.assistants.set([users['assistant']])
+
+    Enrollment.objects.get_or_create(course_instance=instance, user_profile=users['assistant'])
+    Enrollment.objects.get_or_create(course_instance=instance, user_profile=users['student'])
 
     return {'default': instance}
 
