@@ -1,4 +1,4 @@
-FROM apluslms/service-base:python3-1.3
+FROM apluslms/service-base:django-1.5
 
 # Set container related configuration via environment variables
 ENV CONTAINER_TYPE="aplus" \
@@ -36,6 +36,6 @@ RUN : \
  && :
 
 
-EXPOSE 8000
 WORKDIR /srv/aplus
-ENTRYPOINT [ "/init", "/srv/up.sh" ]
+EXPOSE 8000
+CMD [ "manage", "runserver", "0.0.0.0:8000" ]
