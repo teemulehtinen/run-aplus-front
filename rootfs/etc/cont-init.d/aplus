@@ -9,3 +9,5 @@ ensure_dir /run/aplus
 ensure_dir /local/aplus
 ensure_dir /local/aplus/static
 ensure_dir /local/aplus/media
+
+printf "http://%s:8000" "$(hostname -i)" > /var/run/s6/container_environment/APLUS_BASE_URL

@@ -31,8 +31,8 @@ RUN : \
  && find /usr/local/lib/python* -type d -name 'tests' -print0 | xargs -0 rm -rf \
 \
   # preprocess
- && env APLUS_SECRET_KEY="dummy" python3 manage.py compilemessages 2>&1 \
- && env APLUS_SECRET_KEY="dummy" create-django-db.sh aplus aplus /srv/aplus-setup.py \
+ && env APLUS_SECRET_KEY="-" APLUS_BASE_URL="-" python3 manage.py compilemessages 2>&1 \
+ && env APLUS_SECRET_KEY="-" APLUS_BASE_URL="-" create-django-db.sh aplus aplus /srv/aplus-setup.py \
  && :
 
 
