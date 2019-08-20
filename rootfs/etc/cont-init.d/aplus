@@ -10,4 +10,6 @@ ensure_dir /local/aplus
 ensure_dir /local/aplus/static
 ensure_dir /local/aplus/media
 
+ensure_dir /local/lti-services-in 2777 root root
+
 printf "http://%s:8000" "$(hostname -i)" > /var/run/s6/container_environment/APLUS_BASE_URL
