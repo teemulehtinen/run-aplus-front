@@ -1,4 +1,4 @@
-FROM apluslms/service-base:django-1.5
+FROM apluslms/service-base:django-1.6
 
 # Set container related configuration via environment variables
 ENV CONTAINER_TYPE="aplus" \
@@ -7,17 +7,17 @@ ENV CONTAINER_TYPE="aplus" \
 
 COPY rootfs /
 
-ARG BRANCH=v1.4.4
+ARG BRANCH=v1.5.0.rc1
 RUN : \
  && apt_install \
       python3-pillow \
+      python3-lxml \
 \
   # create user
  && adduser --system --no-create-home --disabled-password --gecos "A+ webapp server,,," --home /srv/aplus --ingroup nogroup aplus \
  && mkdir /srv/aplus && chown aplus.nogroup /srv/aplus \
 \
  && cd /srv/aplus \
-\
   # clone and prebuild .pyc files
  && git clone --quiet --single-branch --branch $BRANCH https://github.com/Aalto-LeTech/a-plus.git . \
  && (echo "On branch $(git rev-parse --abbrev-ref HEAD) | $(git describe)"; echo; git log -n5) > GIT \
@@ -31,8 +31,12 @@ RUN : \
  && find /usr/local/lib/python* -type d -name 'tests' -print0 | xargs -0 rm -rf \
 \
   # preprocess
- && env APLUS_SECRET_KEY="-" APLUS_BASE_URL="-" python3 manage.py compilemessages 2>&1 \
- && env APLUS_SECRET_KEY="-" APLUS_BASE_URL="-" create-django-db.sh aplus aplus /srv/aplus-setup.py \
+ && export \
+    APLUS_SECRET_KEY="-" \
+    APLUS_BASE_URL="-" \
+    APLUS_CACHES="{\"default\": {\"BACKEND\": \"django.core.cache.backends.dummy.DummyCache\"}}" \
+ && python3 manage.py compilemessages 2>&1 \
+ && create-db.sh aplus aplus django-migrate.sh \
  && :
 
 

@@ -4,7 +4,6 @@ import django
 from datetime import timedelta
 from django.utils import timezone
 
-
 def create_default_users():
     from django.contrib.auth.models import User
 
@@ -18,6 +17,8 @@ def create_default_users():
     )
     ur.set_password("root")
     ur.save()
+    ur.userprofile.student_id = "<teacher>"
+    ur.userprofile.save()
 
     ua = User.objects.create(
         username="assistant",
