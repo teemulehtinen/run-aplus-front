@@ -7,7 +7,7 @@ ENV CONTAINER_TYPE="aplus" \
 
 COPY rootfs /
 
-ARG BRANCH=v1.6.0rc2
+ARG BRANCH=v1.6.0rc3
 RUN : \
  && apt_install \
       python3-pillow \
