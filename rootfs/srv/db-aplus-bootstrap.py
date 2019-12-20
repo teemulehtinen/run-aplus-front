@@ -9,7 +9,7 @@ def create_default_users():
 
     ur = User.objects.create(
         username="root",
-        email="root@localhost",
+        email="root@localhost.invalid",
         first_name="Ruth",
         last_name="Robinson",
         is_superuser=True,
@@ -17,8 +17,19 @@ def create_default_users():
     )
     ur.set_password("root")
     ur.save()
-    ur.userprofile.student_id = "<teacher>"
+    ur.userprofile.student_id = "<admin>"
     ur.userprofile.save()
+
+    ut = User.objects.create(
+        username="teacher",
+        email="teacher@localhost.invalid",
+        first_name="Terry",
+        last_name="Teacher",
+    )
+    ut.set_password("teacher")
+    ut.save()
+    ut.userprofile.student_id = "<teacher>"
+    ut.userprofile.save()
 
     ua = User.objects.create(
         username="assistant",
@@ -42,7 +53,12 @@ def create_default_users():
     us.userprofile.student_id = "123456"
     us.userprofile.save()
 
-    return {'root': ur.userprofile, 'teacher': ur.userprofile, 'assistant': ua.userprofile, 'student': us.userprofile}
+    return {
+        'root': ur.userprofile,
+        'teacher': ut.userprofile,
+        'assistant': ua.userprofile,
+        'student': us.userprofile
+    }
 
 def create_default_courses(users):
     from course.models import Course, CourseInstance, Enrollment
