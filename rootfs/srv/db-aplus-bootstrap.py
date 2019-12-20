@@ -34,7 +34,7 @@ def create_default_users():
     ua = User.objects.create(
         username="assistant",
         email="assistant@localhost.invalid",
-        first_name="Aaron",
+        first_name="Andy",
         last_name="Assistant",
     )
     ua.set_password("assistant")
@@ -44,8 +44,8 @@ def create_default_users():
 
     us = User.objects.create(
         username="student",
-        email="student@localhost",
-        first_name="Stacey",
+        email="student@localhost.invalid",
+        first_name="Stacy",
         last_name="Student",
     )
     us.set_password("student")
