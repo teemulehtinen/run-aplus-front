@@ -13,27 +13,23 @@ that includes a Docker compose configuration to develop and test course content.
 
 ### Usage
 
-A-plus is installed in `/srv/a-plus`.
-You can mount development version on top of that, if you wish.
+A-plus is installed in `/srv/aplus`.
+You can mount development version of the A+ source code on top of that, if you wish.
 
-Location `/srv/data` is a volume and contains submission files, database and secret key.
-It's world writable, so you can run this container as normal user.
-When running as your self, you could even bind local path to it.
+Location `/data` is a volume and contains submission files, database and secret key.
+It is world writable, so you can run this container as normal user.
 
-Partial example of `docker-compose.yml` (user and volumes are optional of course):
+Partial example of `docker-compose.yml` (volumes are optional of course):
 
 ```yaml
 services:
   plus:
     image: apluslms/run-aplus-front
-    user: $USER_ID:$GROUP_ID
     volumes:
-    # named persistent volume (untill removed)
-    # - data:/srv/data
-    # per project persistent storage
-    # - ./_data/:/srv/data
+    # named persistent volume (until removed)
+    # - data:/data
     # mount development version
-    # - /home/user/a-plus/:/srv/a-plus/:ro
+    # - /home/user/a-plus/:/srv/aplus/:ro
     ports:
       - "8000:8000"
     depends_on:
