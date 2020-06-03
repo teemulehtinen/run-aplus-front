@@ -7,7 +7,7 @@ ENV CONTAINER_TYPE="aplus" \
 
 COPY rootfs /
 
-ARG BRANCH=v1.6.0
+ARG BRANCH=v1.7.0rc1
 RUN : \
  && apt_install \
       python3-pillow \
@@ -19,7 +19,7 @@ RUN : \
 \
  && cd /srv/aplus \
   # clone and prebuild .pyc files
- && git clone --quiet --single-branch --branch $BRANCH https://github.com/Aalto-LeTech/a-plus.git . \
+ && git clone --quiet --single-branch --branch $BRANCH https://github.com/apluslms/a-plus.git . \
  && (echo "On branch $(git rev-parse --abbrev-ref HEAD) | $(git describe)"; echo; git log -n5) > GIT \
  && rm -rf .git \
  && python3 -m compileall -q . \
