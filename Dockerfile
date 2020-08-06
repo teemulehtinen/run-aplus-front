@@ -10,8 +10,9 @@ COPY rootfs /
 ARG BRANCH=v1.7.0
 RUN : \
  && apt_install \
-      python3-pillow \
       python3-lxml \
+      python3-lz4 \
+      python3-pillow \
 \
   # create user
  && adduser --system --no-create-home --disabled-password --gecos "A+ webapp server,,," --home /srv/aplus --ingroup nogroup aplus \
