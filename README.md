@@ -8,7 +8,7 @@ that provide interactive content to learners. A common
 counterpart for content services is the
 [A-plus MOOC-grader](https://hub.docker.com/r/apluslms/run-mooc-grader/).
 
-See into the [A-plus template course](https://github.com/apluslms/course-templates)
+See into the [A-plus manual course](https://github.com/apluslms/aplus-manual)
 that includes a Docker compose configuration to develop and test course content.
 
 ### Usage
