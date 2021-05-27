@@ -4,6 +4,10 @@ import django
 from datetime import timedelta
 from django.utils import timezone
 
+
+LOCAL_ORGANIZATION = 'aalto.fi'
+
+
 def create_default_users():
     from django.contrib.auth.models import User
 
@@ -18,6 +22,7 @@ def create_default_users():
     ur.set_password("root")
     ur.save()
     ur.userprofile.student_id = "<admin>"
+    ur.userprofile.organization = LOCAL_ORGANIZATION
     ur.userprofile.save()
 
     ut = User.objects.create(
@@ -29,6 +34,7 @@ def create_default_users():
     ut.set_password("teacher")
     ut.save()
     ut.userprofile.student_id = "<teacher>"
+    ut.userprofile.organization = LOCAL_ORGANIZATION
     ut.userprofile.save()
 
     ua = User.objects.create(
@@ -40,6 +46,7 @@ def create_default_users():
     ua.set_password("assistant")
     ua.save()
     ua.userprofile.student_id = "133701"
+    ua.userprofile.organization = LOCAL_ORGANIZATION
     ua.userprofile.save()
 
     us = User.objects.create(
@@ -51,13 +58,27 @@ def create_default_users():
     us.set_password("student")
     us.save()
     us.userprofile.student_id = "123456"
+    us.userprofile.organization = LOCAL_ORGANIZATION
     us.userprofile.save()
+
+    ue = User.objects.create(
+        username="unenrolled",
+        email="unenrolled@localhost.invalid",
+        first_name="Union",
+        last_name="Unenrolled",
+    )
+    ue.set_password("unenrolled")
+    ue.save()
+    ue.userprofile.student_id = "987654"
+    ue.userprofile.organization = LOCAL_ORGANIZATION
+    ue.userprofile.save()
 
     return {
         'root': ur.userprofile,
         'teacher': ut.userprofile,
         'assistant': ua.userprofile,
-        'student': us.userprofile
+        'student': us.userprofile,
+        'unenrolled': ue.userprofile,
     }
 
 def create_default_courses(users):
