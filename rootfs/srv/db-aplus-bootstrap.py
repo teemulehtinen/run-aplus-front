@@ -89,7 +89,6 @@ def create_default_courses(users):
         code="DEF000",
         url="def",
     )
-    course.teachers.set([users['teacher']])
 
     today = timezone.now()
     instance = CourseInstance.objects.create(
@@ -100,9 +99,9 @@ def create_default_courses(users):
         ending_time=today + timedelta(days=365),
         configure_url="http://grader:8080/default/aplus-json",
     )
-    instance.assistants.set([users['assistant']])
+    instance.set_teachers([users['teacher']])
+    instance.set_assistants([users['assistant']])
 
-    Enrollment.objects.get_or_create(course_instance=instance, user_profile=users['assistant'])
     Enrollment.objects.get_or_create(course_instance=instance, user_profile=users['student'])
 
     return {'default': instance}
