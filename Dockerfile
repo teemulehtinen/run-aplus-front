@@ -1,4 +1,4 @@
-FROM apluslms/service-base:django-1.10
+FROM apluslms/service-base:django-1.11
 
 # Set container related configuration via environment variables
 ENV CONTAINER_TYPE="aplus" \
@@ -7,7 +7,7 @@ ENV CONTAINER_TYPE="aplus" \
 
 COPY rootfs /
 
-ARG BRANCH=v1.10.2
+ARG BRANCH=v1.11.0rc1
 RUN : \
  && apt_install \
       python3-lxml \
