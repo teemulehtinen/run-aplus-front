@@ -10,6 +10,7 @@ COPY rootfs /
 ARG BRANCH=v1.11.0rc1
 RUN : \
  && apt_install \
+      python3-django-debug-toolbar \
       python3-lxml \
       python3-lz4 \
       python3-pillow \
