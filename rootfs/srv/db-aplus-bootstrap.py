@@ -112,7 +112,7 @@ def create_default_services():
     services = {}
 
     services['rubyric+'] = LTIService.objects.create(
-        url="http://localhost:8090/",
+        url="http://rubyric:8090/session/lti",
         menu_label="Rubyric+",
         menu_icon_class="save-file",
         consumer_key="foo",
@@ -120,11 +120,11 @@ def create_default_services():
     )
 
     services['rubyric'] = LTIService.objects.create(
-        url="http://localhost:8091/",
+        url="http://rubyric:8091/session/lti",
         menu_label="Rubyric",
         menu_icon_class="save-file",
-        consumer_key="foo",
-        consumer_secret="bar",
+        consumer_key="rubyric",
+        consumer_secret="rubyric",
     )
 
     return services
