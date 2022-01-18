@@ -5,7 +5,8 @@ ADMINS = (
 #ALLOWED_HOSTS = ["*"]
 
 # Authentication and authentication library settings.
-APLUS_AUTH = {
+APLUS_AUTH_LOCAL = {
+    "UID": "aplus",
     "PRIVATE_KEY": """-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAnME9k+VaxbUD2fGDgpKHRi6cE4T6HZzqWDpvtOShhoHSYQ6V
 lX0YnDQYwdDoTTK+XIBG2uS8W+3CsvpxjpHF8Ny5xzxNGZTeqSn8A08BvoQ5cX7b
@@ -44,10 +45,9 @@ qwIDAQAB
 -----END PUBLIC KEY-----""",
     "DISABLE_LOGIN_CHECKS": False,
     "DISABLE_JWT_SIGNING": False,
-}
-# List all trusted public keys with an alias.
-ALIAS_TO_PUBLIC_KEY = {
-    "grader": """-----BEGIN PUBLIC KEY-----
+    # List all trusted public keys with an UID.
+    "UID_TO_KEY": {
+        "grader": """-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAweaxw/6dSfIWegPg6y9w
 rsjSNDZaShQzH9/HsOjcPeIrO8ZuxT5iZfaPji7y5m+VYaG+76q0harls9uvYdcp
 dRD8inrUutd6LvMUInyD6h/OVhlOxvwMzh+UVpE9OnzignGCVpWVqsepJ5/IMf+H
@@ -56,12 +56,12 @@ dRD8inrUutd6LvMUInyD6h/OVhlOxvwMzh+UVpE9OnzignGCVpWVqsepJ5/IMf+H
 cGBcQ7A3ua3NPAiQl5mI+tj2yOg+qljUIAEmUXbrrEGqGvYDX0VXlP9TtCU8EP/F
 6wIDAQAB
 -----END PUBLIC KEY-----""",
+    },
+    # A mapping of URLs to UIDs.
+    "TRUSTING_REMOTES": {
+        "grader:8080": "grader",
+    },
 }
-# A mapping of URLs to aliases.
-URL_TO_ALIAS = {
-    "http://grader:8080": "grader",
-}
-
 
 STATIC_ROOT = '/local/aplus/static/'
 MEDIA_ROOT = '/local/aplus/media/'
