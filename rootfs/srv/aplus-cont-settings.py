@@ -59,7 +59,7 @@ cGBcQ7A3ua3NPAiQl5mI+tj2yOg+qljUIAEmUXbrrEGqGvYDX0VXlP9TtCU8EP/F
     },
     # A mapping of URLs to UIDs.
     "TRUSTING_REMOTES": {
-        "grader:8080": "grader",
+        "http://grader:8080": "grader",
     },
 }
 
