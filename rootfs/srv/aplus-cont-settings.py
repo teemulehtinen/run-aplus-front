@@ -56,10 +56,20 @@ dRD8inrUutd6LvMUInyD6h/OVhlOxvwMzh+UVpE9OnzignGCVpWVqsepJ5/IMf+H
 cGBcQ7A3ua3NPAiQl5mI+tj2yOg+qljUIAEmUXbrrEGqGvYDX0VXlP9TtCU8EP/F
 6wIDAQAB
 -----END PUBLIC KEY-----""",
+        "gitmanager": """-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsaVdUeIDB1TluqYgkxRa
+0JMxIoa1f6V0UpfR6eoa/RKyZS3A2mp9Mjt9OXRB4sG9L+OQRm4kx03M2QyFPEsz
+mcehmZ1kWXyXJHyhqnaUACm2bUKSjexsfoHjZV4/KaFe7vdyPwXhpVQ876/DKApk
+OF6ugfeETx5tSfgWMerOjV6lqrgGEi9OvuymvJlY+Jgxi6uhZTbZntcQ0Dbpp7j5
+XHAshtEP2NOpefG/5v03zSILs9oUaoAOSb2VMke9+/pg20vYYzYEcNbqUVMal88L
+kb3lV9aulPi7rH+FGRZuI0/wFzWcuLSupF1+YcwGprsm3seead90dRh6gYHXk8v1
+2wIDAQAB
+-----END PUBLIC KEY-----""",
     },
     # A mapping of URLs to UIDs.
     "TRUSTING_REMOTES": {
         "http://grader:8080": "grader",
+        "http://gitmanager:8070": "gitmanager",
     },
 }
 
