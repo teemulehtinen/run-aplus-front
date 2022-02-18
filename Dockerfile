@@ -36,7 +36,6 @@ RUN : \
   # preprocess
  && export \
     APLUS_SECRET_KEY="-" \
-    APLUS_BASE_URL="-" \
     APLUS_CACHES="{\"default\": {\"BACKEND\": \"django.core.cache.backends.dummy.DummyCache\"}}" \
  && python3 manage.py compilemessages 2>&1 \
  && create-db.sh aplus aplus django-migrate.sh \

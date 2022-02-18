@@ -4,6 +4,9 @@ ADMINS = (
 )
 #ALLOWED_HOSTS = ["*"]
 
+BASE_URL = 'http://localhost:8000'
+SERVICE_BASE_URL = 'http://plus:8000'
+
 # Authentication and authentication library settings.
 APLUS_AUTH_LOCAL = {
     "UID": "aplus",
@@ -93,7 +96,6 @@ CACHES = {
 REMOTE_PAGE_HOSTS_MAP = {
     "grader:8080": "localhost:8080",
 }
-OVERRIDE_SUBMISSION_HOST = "http://plus:8000"
 
 #CELERY_BROKER_URL = "amqp://"
 
