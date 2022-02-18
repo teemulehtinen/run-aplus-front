@@ -3,7 +3,8 @@ FROM apluslms/service-base:django-1.13
 # Set container related configuration via environment variables
 ENV CONTAINER_TYPE="aplus" \
     APLUS_LOCAL_SETTINGS="/srv/aplus-cont-settings.py" \
-    APLUS_SECRET_KEY_FILE="/local/aplus/secret_key.py"
+    APLUS_SECRET_KEY_FILE="/local/aplus/secret_key.py" \
+    USE_GITMANAGER="false"
 
 COPY rootfs /
 
