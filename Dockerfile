@@ -31,6 +31,7 @@ RUN : \
  && pip_install \
       -r requirements.txt \
       "django-debug-toolbar >= 3.8.1" \
+      flower \
  && rm requirements.txt \
  && find /usr/local/lib/python* -type d -regex '.*/locale/[a-z_A-Z]+' -not -regex '.*/\(en\|fi\|sv\)' -print0 | xargs -0 rm -rf \
  && find /usr/local/lib/python* -type d -name 'tests' -print0 | xargs -0 rm -rf \
@@ -41,9 +42,13 @@ RUN : \
     APLUS_CACHES="{\"default\": {\"BACKEND\": \"django.core.cache.backends.dummy.DummyCache\"}}" \
  && python3 manage.py compilemessages 2>&1 \
  && create-db.sh aplus aplus django-migrate.sh \
+ \
+ && mkdir -p /var/celery/results \
+ && chown aplus:nogroup /var/celery/results \
  && :
 
 
 WORKDIR /srv/aplus
 EXPOSE 8000
+EXPOSE 5555
 CMD [ "manage", "runserver", "0.0.0.0:8000" ]
