@@ -6,6 +6,7 @@ ADMINS = (
 
 BASE_URL = 'http://localhost:8000'
 SERVICE_BASE_URL = 'http://plus:8000'
+GITMANAGER_URL = 'http://gitmanager:8070'
 
 # Authentication and authentication library settings.
 APLUS_AUTH_LOCAL = {
