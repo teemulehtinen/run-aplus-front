@@ -6,7 +6,12 @@ ADMINS = (
 
 BASE_URL = 'http://localhost:8000'
 SERVICE_BASE_URL = 'http://plus:8000'
-GITMANAGER_URL = 'http://gitmanager:8070'
+
+from os import environ
+if environ.get('USE_GITMANAGER') == 'true':
+    GITMANAGER_URL = 'http://gitmanager:8070'
+else:
+    GITMANAGER_URL = None
 
 # Authentication and authentication library settings.
 APLUS_AUTH_LOCAL = {
