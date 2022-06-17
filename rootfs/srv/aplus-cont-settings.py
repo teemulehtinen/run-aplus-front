@@ -101,6 +101,7 @@ CACHES = {
 
 REMOTE_PAGE_HOSTS_MAP = {
     "grader:8080": "localhost:8080",
+    "gitmanager:8070": "localhost:8070",
 }
 
 #CELERY_BROKER_URL = "amqp://"
