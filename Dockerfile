@@ -8,7 +8,7 @@ ENV CONTAINER_TYPE="aplus" \
 
 COPY rootfs /
 
-ARG BRANCH=v1.15.0rc1b
+ARG BRANCH=v1.15.0
 RUN : \
  && apt_install \
       python3-django-debug-toolbar \
