@@ -127,6 +127,16 @@ def create_default_services():
         consumer_secret="rubyric",
     )
 
+    services['grader'] = LTIService.objects.create(
+        url="http://grader:8080/",
+        destination_region=0,
+        menu_label="Grader",
+        menu_icon_class="save-file",
+        access_settings=5,
+        consumer_key="grader",
+        consumer_secret="grader",
+    )
+
     return services
 
 
