@@ -1,4 +1,4 @@
-FROM apluslms/service-base:django-1.15
+FROM apluslms/service-base:django-1.16
 
 # Set container related configuration via environment variables
 ENV CONTAINER_TYPE="aplus" \
@@ -8,7 +8,7 @@ ENV CONTAINER_TYPE="aplus" \
 
 COPY rootfs /
 
-ARG BRANCH=v1.16.3
+ARG BRANCH=v1.17.0
 RUN : \
  && apt_install \
       python3-django-debug-toolbar \
