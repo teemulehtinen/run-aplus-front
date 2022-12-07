@@ -1,11 +1,24 @@
 import os
+import random
 import sys
-import django
+
 from datetime import timedelta
+
+import django
+
 from django.utils import timezone
 
 
 LOCAL_ORGANIZATION = 'aalto.fi'
+NUM_USERS = 500
+
+
+def read_list_file(filepath):
+    rows = []
+    with open(filepath) as f:
+        for line in f:
+            rows.append(line.strip())
+    return rows
 
 
 def create_default_users():
@@ -73,12 +86,39 @@ def create_default_users():
     ue.userprofile.organization = LOCAL_ORGANIZATION
     ue.userprofile.save()
 
+    # List of common names in England adapted from Office for National Statistics.
+    # https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/livebirths/datasets/babynamesenglandandwalesbabynamesstatisticsboys
+    # https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/livebirths/datasets/babynamesenglandandwalesbabynamesstatisticsgirls
+    first_names = read_list_file('/srv/first_names.txt')
+    len_first_names = len(first_names)
+    rand = random.Random(846793)
+    rand.shuffle(first_names)
+
+    last_names = read_list_file('/srv/last_names.txt')
+    len_last_names = len(last_names)
+    rand.shuffle(last_names)
+
+    students = []
+    for i in range(1, NUM_USERS + 1):
+        u = User.objects.create_user(
+            f'student{i}',
+            email=f'student{i}@localhost.invalid',
+            password=f'student{i}',
+            first_name=first_names[(i - 1) % len_first_names],
+            last_name=last_names[(i - 1) % len_last_names],
+        )
+        u.userprofile.student_id = f"1111{i:04}"
+        u.userprofile.organization = LOCAL_ORGANIZATION
+        u.userprofile.save()
+        students.append(u.userprofile)
+
     return {
         'root': ur.userprofile,
         'teacher': ut.userprofile,
         'assistant': ua.userprofile,
         'student': us.userprofile,
         'unenrolled': ue.userprofile,
+        'students': students,
     }
 
 def create_default_courses(users):
@@ -88,6 +128,11 @@ def create_default_courses(users):
         name="Def. Course",
         code="DEF000",
         url="def",
+    )
+    manual_course = Course.objects.create(
+        name="Aplus Manual",
+        code="aplus-manual",
+        url="aplus-manual",
     )
 
     today = timezone.now()
@@ -102,9 +147,26 @@ def create_default_courses(users):
     instance.set_teachers([users['teacher']])
     instance.set_assistants([users['assistant']])
 
-    Enrollment.objects.get_or_create(course_instance=instance, user_profile=users['student'])
+    manual_instance = CourseInstance.objects.create(
+        course=manual_course,
+        instance_name="Main",
+        url="master",
+        starting_time=today - timedelta(days=3 * 365),
+        ending_time=today + timedelta(days=3 * 365),
+        configure_url="http://grader:8080/aplus-manual/aplus-json",
+    )
+    manual_instance.set_teachers([users['teacher']])
 
-    return {'default': instance}
+    instance.enroll_student(users['student'].user)
+
+    for student in users['students']:
+        instance.enroll_student(student.user)
+        manual_instance.enroll_student(student.user)
+
+    return {
+        'default': instance,
+        'aplus-manual': manual_instance,
+    }
 
 def create_default_services():
     from external_services.models import LTIService
@@ -139,6 +201,91 @@ def create_default_services():
 
     return services
 
+def create_default_user_tags(course_instance, students):
+    from course.models import UserTag, UserTagging
+
+    tag_basic, created = UserTag.objects.get_or_create(
+        course_instance=course_instance,
+        name="Basic",
+        slug="basic",
+        description="Basic level",
+        color="#2cff14",
+    )
+    tag_intermediate, created = UserTag.objects.get_or_create(
+        course_instance=course_instance,
+        name="Intermediate",
+        slug="intermediate",
+        description="Intermediate level",
+        color="#e4fc2d",
+    )
+    tag_advanced, created = UserTag.objects.get_or_create(
+        course_instance=course_instance,
+        name="Advanced",
+        slug="advanced",
+        description="Advanced level",
+        color="#f51505",
+    )
+    tag_highschool, created = UserTag.objects.get_or_create(
+        course_instance=course_instance,
+        name="High school",
+        slug="highschool",
+        description="High school student",
+        color="#07dde8",
+    )
+    tag_exchange, created = UserTag.objects.get_or_create(
+        course_instance=course_instance,
+        name="Exchange",
+        slug="exchange",
+        description="Exchange student",
+        color="#6706bd",
+    )
+    tag_local, created = UserTag.objects.get_or_create(
+        course_instance=course_instance,
+        name="Local",
+        slug="local",
+        description="Local student",
+        color="#1100fc",
+    )
+    tag_visitor, created = UserTag.objects.get_or_create(
+        course_instance=course_instance,
+        name="Visitor",
+        slug="visitor",
+        description="Visiting student",
+        color="#ff63d3",
+    )
+
+    for i, student in enumerate(students):
+        if i % 3 == 0:
+            UserTagging.objects.set(student, tag_basic)
+        elif i % 3 == 1:
+            UserTagging.objects.set(student, tag_intermediate)
+        else:
+            UserTagging.objects.set(student, tag_advanced)
+
+        if i % 2 == 0:
+            UserTagging.objects.set(student, tag_local)
+        elif i % 7 == 0:
+            UserTagging.objects.set(student, tag_highschool)
+        elif i % 3 == 0:
+            UserTagging.objects.set(student, tag_exchange)
+        else:
+            UserTagging.objects.set(student, tag_visitor)
+
+    tags = [tag_basic, tag_intermediate, tag_advanced, tag_highschool, tag_exchange, tag_local, tag_visitor]
+    return { t.slug: t for t in tags }
+
+def create_default_student_groups(course_instance, students):
+    from course.models import StudentGroup
+
+    # Create groups. Some students don't have any group and some have more than one.
+    for i in range(len(students) - 2):
+        if i % 3 == 0 and i % 2 == 1:
+            g = StudentGroup.objects.create(course_instance=course_instance)
+            g.members.add(students[i], students[i+1], students[i+2])
+        if i % 5 == 0:
+            g = StudentGroup.objects.create(course_instance=course_instance)
+            g.members.add(students[i], students[i+1])
+
 
 if __name__ == '__main__':
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aplus.settings")
@@ -148,3 +295,6 @@ if __name__ == '__main__':
     users = create_default_users()
     courses = create_default_courses(users)
     services = create_default_services()
+    tags = create_default_user_tags(courses['default'], users['students'])
+    create_default_student_groups(courses['default'], users['students'])
+
