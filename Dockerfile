@@ -1,4 +1,4 @@
-FROM apluslms/service-base:django-1.16
+FROM apluslms/service-base:django-1.17
 
 # Set container related configuration via environment variables
 ENV CONTAINER_TYPE="aplus" \
@@ -8,10 +8,9 @@ ENV CONTAINER_TYPE="aplus" \
 
 COPY rootfs /
 
-ARG BRANCH=v1.18.0
+ARG BRANCH=v1.18.1
 RUN : \
  && apt_install \
-      python3-django-debug-toolbar \
       python3-lxml \
       python3-lz4 \
       python3-pillow \
@@ -19,6 +18,7 @@ RUN : \
   # create user
  && adduser --system --no-create-home --disabled-password --gecos "A+ webapp server,,," --home /srv/aplus --ingroup nogroup aplus \
  && mkdir /srv/aplus && chown aplus.nogroup /srv/aplus \
+ && git config --global --add safe.directory /srv/aplus \
 \
  && cd /srv/aplus \
   # clone and prebuild .pyc files
@@ -28,7 +28,9 @@ RUN : \
  && python3 -m compileall -q . \
 \
   # install requirements, remove the file, remove unrequired locales and tests
- && pip_install -r requirements.txt \
+ && pip_install \
+      -r requirements.txt \
+      "django-debug-toolbar >= 3.8.1" \
  && rm requirements.txt \
  && find /usr/local/lib/python* -type d -regex '.*/locale/[a-z_A-Z]+' -not -regex '.*/\(en\|fi\|sv\)' -print0 | xargs -0 rm -rf \
  && find /usr/local/lib/python* -type d -name 'tests' -print0 | xargs -0 rm -rf \
