@@ -38,6 +38,20 @@ def create_default_users():
     ur.userprofile.organization = LOCAL_ORGANIZATION
     ur.userprofile.save()
 
+    uad = User.objects.create(
+        username="admin",
+        email="admin@localhost.invalid",
+        first_name="Admin",
+        last_name="User",
+        is_superuser=True,
+        is_staff=True,
+    )
+    uad.set_password("admin")
+    uad.save()
+    uad.userprofile.student_id = ""
+    uad.userprofile.organization = LOCAL_ORGANIZATION
+    uad.userprofile.save()
+
     ut = User.objects.create(
         username="teacher",
         email="teacher@localhost.invalid",
@@ -114,6 +128,7 @@ def create_default_users():
 
     return {
         'root': ur.userprofile,
+        'admin': uad.userprofile,
         'teacher': ut.userprofile,
         'assistant': ua.userprofile,
         'student': us.userprofile,
@@ -170,6 +185,10 @@ def create_default_courses(users):
 
 def create_default_services():
     from external_services.models import LTIService
+    from pylti1p3.contrib.django.lti1p3_tool_config.models import (
+        LtiTool,
+        LtiToolKey,
+    )
 
     services = {}
 
@@ -197,6 +216,29 @@ def create_default_services():
         access_settings=5,
         consumer_key="grader",
         consumer_secret="grader",
+    )
+
+    # A+ as an LTI Tool v1.3 for Moodle as the Platform.
+    with open("/srv/lti-tool-private.key", "r") as keyfile:
+        lti_tool_private = keyfile.read()
+    with open("/srv/lti-tool-public.key", "r") as keyfile:
+        lti_tool_public = keyfile.read()
+
+    lti_tool_key = LtiToolKey.objects.create(
+        name="http://moodle:8050",
+        private_key=lti_tool_private,
+        public_key=lti_tool_public,
+    )
+    services['lti_tool'] = LtiTool.objects.create(
+        title="http://moodle:8050",
+        issuer="http://moodle:8050",
+        client_id="abcdefghijklmn",
+        use_by_default=True,
+        auth_login_url="http://moodle:8050/mod/lti/auth.php",
+        auth_token_url="http://moodle:8050/mod/lti/token.php",
+        key_set_url="http://moodle:8050/mod/lti/certs.php",
+        tool_key=lti_tool_key,
+        deployment_ids='["1"]',
     )
 
     return services
