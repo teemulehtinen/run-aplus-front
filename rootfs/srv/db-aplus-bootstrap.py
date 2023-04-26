@@ -149,6 +149,11 @@ def create_default_courses(users):
         code="aplus-manual",
         url="aplus-manual",
     )
+    test_course = Course.objects.create(
+        name="Test Course",
+        code="test-course",
+        url="test-course",
+    )
 
     today = timezone.now()
     instance = CourseInstance.objects.create(
@@ -172,15 +177,27 @@ def create_default_courses(users):
     )
     manual_instance.set_teachers([users['teacher']])
 
+    testcourse_instance = CourseInstance.objects.create(
+        course=test_course,
+        instance_name="Master",
+        url="master",
+        starting_time=today - timedelta(days=3 * 365),
+        ending_time=today + timedelta(days=3 * 365),
+        configure_url="http://grader:8080/test-course-master/aplus-json",
+    )
+    testcourse_instance.set_teachers([users['teacher']])
+
     instance.enroll_student(users['student'].user)
 
     for student in users['students']:
         instance.enroll_student(student.user)
         manual_instance.enroll_student(student.user)
+        testcourse_instance.enroll_student(student.user)
 
     return {
         'default': instance,
         'aplus-manual': manual_instance,
+        'test-course-master': testcourse_instance,
     }
 
 def create_default_services():
