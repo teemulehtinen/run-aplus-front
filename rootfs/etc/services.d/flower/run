@@ -3,6 +3,7 @@
 define user aplus
 define home /srv/${user}
 #define daemon /usr/bin/epmd
+# Using stdout instead of stderr
 fdmove -c 2 1
 
 # (-s is undocumented magic, that seems to move _prog_ to end of _then_ or
@@ -20,4 +21,4 @@ s6-env HOME=${home}
 cd ${home}
 
 # Start daemon
-${python3} -m celery -A aplus flower --address=0.0.0.0
+${python3} -m celery -A aplus flower --address=0.0.0.0 --enable_events=False

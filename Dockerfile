@@ -14,6 +14,7 @@ RUN : \
       python3-lxml \
       python3-lz4 \
       python3-pillow \
+      redis \
 \
   # create user
  && adduser --system --no-create-home --disabled-password --gecos "A+ webapp server,,," --home /srv/aplus --ingroup nogroup aplus \
