@@ -45,7 +45,7 @@ RUN : \
  && create-db.sh aplus aplus django-migrate.sh \
  \
  && mkdir -p /var/celery/results \
- && chown aplus:nogroup /var/celery/results \
+ && chown -R aplus:nogroup /var/celery \
  && :
 
 

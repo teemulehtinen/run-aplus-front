@@ -21,4 +21,4 @@ s6-env HOME=${home}
 cd ${home}
 
 # Start celery daemon
-${python3} -m debugpy --listen 0.0.0.0:5679 -m celery -A aplus worker --loglevel=debug --concurrency 1 --hostname worker_main@aplus --beat --task-events
+${python3} -m debugpy --listen 0.0.0.0:5679 -m celery -A aplus worker --loglevel=debug --concurrency 1 --hostname worker_main@aplus --beat --task-events --schedule /var/celery/celerybeat-schedule
