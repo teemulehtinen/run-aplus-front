@@ -4,6 +4,7 @@ FROM --platform=$TARGETPLATFORM apluslms/service-base:django-1.18
 ENV CONTAINER_TYPE="aplus" \
     APLUS_LOCAL_SETTINGS="/srv/aplus-cont-settings.py" \
     APLUS_SECRET_KEY_FILE="/local/aplus/secret_key.py" \
+    CONFIGURE_COURSE="true" \
     USE_GITMANAGER="false"
 
 COPY rootfs /
